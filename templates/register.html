@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>Sign up for Alexbook!</h1>
+        <form method='POST'>
+          <table>
+            <tr>
+              <td> <label>Username:</td>
+              <td> <input name="usr_name" type="text" value='{{user_field}}' /></label> </td>
+              <td class="error">{{user_error}}</td>
+            </tr>
+            <tr>
+              <td> <label>Password:</td>
+              <td> <input name="pas_word" type="password" value='{{pass_field}}' /> </label> </td>
+              <td class="error">{{pass_error}}</td>
+            </tr> 
+            <tr>
+              <td> <label>Verify Password: </td>
+              <td> <input name="ver_word" type="password" value='{{veri_field}}' /> </label> </td>
+              <td class="error">{{veri_error}}</td>
+            </tr>
+            <tr> 
+              <td> <label>Email Address: </td>
+              <td> <input name="e_mail" type="test" value='{{emal_field}}' /> </label> </td>
+              <td class="error">{{emal_error}}</td>
+            </tr>
+            <tr>
+              <td> <input type="submit" value="Sign Up" /> </td>
+            </tr>
+        </table>
+        </form>
+
+        {% endblock %}
