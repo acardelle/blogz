@@ -20,7 +20,7 @@ class Blog(db.Model):
    def __init__(self, title, body_text, owner):
        self.title = title
        self.body_text = body_text
-       self.owner = owner
+       self.owner = owner_id
        self.completed = False
       
 
@@ -188,18 +188,19 @@ def newpost():
 @app.route('/indypost', methods=['POST','GET'])
 def indypost():
     
-    id_d = request.args.get('id')
-    case_post = Blog.query.filter_by(id=id_d).first()
+    id_post = request.args.get('id')
+    case_post = Blog.query.filter_by(id=id_post).first()
 
     return render_template('indypost.html', case_post=case_post)
 
 @app.route('/singleUser', methods=['POST','GET'])
 def singleUser():
     
-    id_d = request.args.get('id')
-    case_post = Blog.query.filter_by(id=id_d).first()
+    id_user = request.args.get('id')
+    user = User.query.filter_by(id=id_user).first()
+    user_posts = Blog.query.filter_by(owner_id=id_user).all()
 
-    return render_template('singleUser.html', case_post=case_post)
+    return render_template('singleUser.html', user=user, user_posts=user_posts)
 
 """@app.route('/delete-task', methods=['POST'])
 def delete_task():

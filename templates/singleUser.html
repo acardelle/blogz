@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{user.username}}'s Blog Posts</h1>
+    
+<hr />
+
+{% if user_posts|length == 0 %}
+<p>No posts yet by {{user.username}}</p>
+{% else %}
+{% for user_post in user_posts %}
+<ul>
+    <li>
+        <b><a href='/indypost?id={{user_post.id}}' name={{user_post.id}} value={{user_post.id}}>{{user_post.title}}</a></b>
+        <p>{{user_post.body_text}}</p>
+        <p>{{user_post.id}}</p>
+    </li>
+</ul>
+{% endfor %} 
+{% endif %}
+
+{% endblock %}
