@@ -61,7 +61,7 @@ def invalid_emal(word):
 
 @app.before_request
 def require_login():
-    allowed_routes = ['login', 'register']
+    allowed_routes = ['login', 'register', 'blog',]
     if request.endpoint not in allowed_routes and 'username' not in session:
         return redirect('/login')
  
@@ -75,7 +75,7 @@ def login():
         if user and user.password == password:
             session['username'] = username
             flash("Logged in")
-            return redirect('/')
+            return redirect('/blog')
         else:
             flash('User password incorrect, or user does not exist', 'error')
 
@@ -125,7 +125,7 @@ def register():
                 db.session.add(new_user)
                 db.session.commit()
                 session['username'] = username
-                return redirect('/')
+                return redirect('/blog')
             
             else:
                 # TODO - user better response messaging
@@ -143,18 +143,19 @@ def register():
 
         # TODO - validate user's data
 
-
-
-
     return render_template('register.html')
 
 @app.route('/logout')
 def logout():
     del session['username']
-    return redirect('/')
+    return redirect('/blog')
 
 @app.route('/', methods=['POST','GET'])
 def index():
+    return render_template('index.html')
+
+@app.route('/blog', methods=['POST','GET'])
+def blog():
 
     postings = Blog.query.filter_by(completed = False).all()
     completed_postings = Blog.query.filter_by(completed = True).all()
