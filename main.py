@@ -152,7 +152,10 @@ def logout():
 
 @app.route('/', methods=['POST','GET'])
 def index():
-    return render_template('index.html')
+    
+    users = User.query.all()
+
+    return render_template('index.html', title="Our Users", users=users)
 
 @app.route('/blog', methods=['POST','GET'])
 def blog():
@@ -189,6 +192,14 @@ def indypost():
     case_post = Blog.query.filter_by(id=id_d).first()
 
     return render_template('indypost.html', case_post=case_post)
+
+@app.route('/singleUser', methods=['POST','GET'])
+def singleUser():
+    
+    id_d = request.args.get('id')
+    case_post = Blog.query.filter_by(id=id_d).first()
+
+    return render_template('singleUser.html', case_post=case_post)
 
 """@app.route('/delete-task', methods=['POST'])
 def delete_task():
