@@ -12,26 +12,16 @@
     {% for posting in postings %}
     <b><a href='/indypost?id={{posting.id}}' name={{posting.id}} value={{posting.id}}>{{posting.title}}</a></b>
     <p>{{posting.body_text}}</p>
-    <p>{{posting.id}}</p>
+    <p> Posted by <b><a href='/singleUser?id={{posting.owner.id}}'>{{posting.owner.username}}</a></b></p>
             
-        </li>
+       <!--  </li>
             <form method='post' action="/delete-task" style="display:inline-block;"> 
-               <!-- <input type="hidden" name="task-id" value=/> -->
+               <input type="hidden" name="task-id" value=/> 
                 <input type="submit" value='Done!' />
-            </form>
-            <hr />
+            </form> -->
+            <hr /> 
         {% endfor %} 
     </ul>
 
     {% endif %}
-
-    <hr />
-
-    <h2>Completed</h2>
-
-    <ul>
-        {%for posting in completed_postings %}
-        <li>{{posting.title}}</li>
-        {% endfor %}
-    </ul>
 {% endblock %}    

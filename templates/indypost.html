@@ -3,6 +3,6 @@
 {% block content %}
 <b>{{case_post.title}}</b>
     <p>{{case_post.body_text}}</p>
-    <p>{{testname}}</p>
+    <p> Posted by <b><a href='/singleUser?id={{case_post.owner.id}}'>{{case_post.owner.username}}</a></b></p>
 
 {% endblock %} 
