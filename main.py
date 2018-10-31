@@ -32,7 +32,7 @@ class User(db.Model):
     password = db.Column(db.String(120))
     postings = db.relationship('Blog', backref='owner')
 
-    def __init__(self, email, password):
+    def __init__(self, username, email, password):
         self.username = username
         self.email = email
         self.password = password
@@ -64,54 +64,6 @@ def require_login():
     allowed_routes = ['login', 'register']
     if request.endpoint not in allowed_routes and 'username' not in session:
         return redirect('/login')
-
-"""@app.route("/", methods=['POST'])
-def validate_signup():
-
-  
-  username = request.form['usr_name']
-  password = request.form['pas_word']
-  veriword = request.form['ver_word']
-  email    = request.form['e_mail']
-  
-  user_error = ''
-  pass_error = ''
-  veri_error = ''
-  emal_error = ''
-
-#Username checks
-  if invalid_char(username) == True:
-    user_error = 'Invalid username'
-  if is_blank(username) == True:
-    user_error = 'No username input detected (Must be 3-20 characters with no whitespaces)'
-
-#Password checks
-  if invalid_char(password) == True:
-    pass_error = 'Invalid password (Must be 3-20 characters with no whitespaces)'
-  if is_blank(password) == True:
-    pass_error = 'No password input detected'
-
-#Verify checks
-  if veriword != password:
-    veri_error = 'Passwords do not match'
-
-#Email checks
-  if (email != '') and invalid_emal(email) == True:
-    emal_error = 'Invalid email address (Must be include a valid domain)'
-
-#Success condition
-  if not user_error and not pass_error and not veri_error and not emal_error:
-    return render_template('blog.html', name=username)
-
-#Error redirection
-  else:
-    return render_template('register.html',
-     user_error=user_error,
-     user_field = username,
-     pass_error=pass_error,
-     veri_error=veri_error,
-     emal_error=emal_error,
-     emal_field = email)"""
  
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -133,23 +85,65 @@ def login():
 def register():
 
     if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password']
-        verify = request.form['verify']
+        username = request.form['usr_name']
+        email    = request.form['e_mail']
+        password = request.form['pas_word']
+        veriword = request.form['ver_word']
+
+        user_error = ''
+        pass_error = ''
+        veri_error = ''
+        emal_error = ''
+
+        #Username checks
+        if invalid_char(username) == True:
+            user_error = 'Invalid username'
+        if is_blank(username) == True:
+            user_error = 'No username input detected (Must be 3-20 characters with no whitespaces)'
+
+        #Password checks
+        if invalid_char(password) == True:
+            pass_error = 'Invalid password (Must be 3-20 characters with no whitespaces)'
+        if is_blank(password) == True:
+            pass_error = 'No password input detected'
+
+        #Verify checks
+        if veriword != password:
+            veri_error = 'Passwords do not match'
+
+        #Email checks
+        if (email != '') and invalid_emal(email) == True:
+            emal_error = 'Invalid email address (Must be include a valid domain)'
+        
+        #Success condition
+        if not user_error and not pass_error and not veri_error and not emal_error:
+
+            existing_user = User.query.filter_by(username=username).first()
+
+            if not existing_user:
+                new_user = User(username, email, password)
+                db.session.add(new_user)
+                db.session.commit()
+                session['username'] = username
+                return redirect('/')
+            
+            else:
+                # TODO - user better response messaging
+                return "<h1>Duplicate user</h1>"
+        
+        #Error redirection
+        else:
+            return render_template('register.html',
+            user_error=user_error,
+            user_field = username,
+            pass_error=pass_error,
+            veri_error=veri_error,
+            emal_error=emal_error,
+            emal_field = email)
 
         # TODO - validate user's data
 
-        existing_user = User.query.filter_by(username=username).first()
-        if not existing_user:
-            new_user = User(username, email, password)
-            db.session.add(new_user)
-            db.session.commit()
-            session['username'] = username
-            return redirect('/')
-        else:
-            # TODO - user better response messaging
-            return "<h1>Duplicate user</h1>"
+
 
 
     return render_template('register.html')
